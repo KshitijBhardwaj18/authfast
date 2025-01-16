@@ -19,15 +19,6 @@ export const NewPasswordTokenVerification = async (token: string) => {
     return { error: "Token has expired" };
   }
 
-  const tokenDeleted = await db.verifiactionToken.delete({
-    where: {
-      id: existingToken.id,
-    },
-  });
-
-  console.log(tokenDeleted);
-
-
   return { success: true };
 };
 
@@ -37,22 +28,34 @@ export const UpdatePassword = async (
 ) => {
   const validatedFields = newPasswordSchema.safeParse(values);
 
-  if(!validatedFields){
-    return {error : "Invalid Fields"}
+  if (!validatedFields) {
+    return { error: "Invalid Fields" };
   }
 
   const { password } = values;
 
+  console.log({"password" : password});
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const Token = await getPasswordVerificationToken(token);
-
+  console.log(Token);
   if (!Token) {
     return { error: "Server Error" };
   }
   const { email } = Token;
 
-  const updatedPassword = db.user.update({
+  const tokenDeleted = await db.resetPasswordToken.delete({
+    where: {
+      id: Token.id,
+    },
+  });
+
+  console.log(tokenDeleted);
+
+  console.log(email)
+
+  const updatedPassword = await db.user.update({
     where: {
       email,
     },
@@ -61,7 +64,9 @@ export const UpdatePassword = async (
     },
   });
 
-  if (!updatedPassword) {
+  console.log({"update" : updatedPassword})
+
+  if (updatedPassword == null) {
     return { error: "Invalid credentials" };
   } else {
     return { success: "Password updated" };

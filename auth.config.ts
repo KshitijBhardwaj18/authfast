@@ -52,12 +52,13 @@ export default {
           const user = await getUserByEmail(email);
 
           if (!user || !user.password) return null;
-
+          console.log("Reached here")
           const passwordMatch = await bcrypt.compare(password, user.password);
 
           if (passwordMatch) return user;
+          console.log("Reached here")
         }
-
+        
         return null;
       },
     }),

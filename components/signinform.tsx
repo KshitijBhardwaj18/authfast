@@ -108,7 +108,7 @@ const SignInForm = () => {
               />
               <Button asChild className="font-normal p-0" variant="link"> 
               <Link href="/auth/reset">
-                Forgot your password
+                Forgot your password?
               </Link>
 
               </Button>

@@ -87,7 +87,7 @@ const NewPasswordForm = () => {
   return (
     <CardWrapper>
       <div className="flex flex-col justify-center items-center">
-        {!success && !error && <BeatLoader />}
+        {!isValidToken && !success && !error && <BeatLoader />}
 
         {isValidToken && (
           <Form {...form}>
@@ -97,7 +97,7 @@ const NewPasswordForm = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>New Password</FormLabel>
                     <FormControl>
                       <Input
                         className="placeholder:text-[10px]"
